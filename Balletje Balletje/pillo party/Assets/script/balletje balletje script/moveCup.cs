@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Pillo;
 
 public class moveCup : MonoBehaviour {
 	public bool StartGame=false,CaculatoToPos=false;
@@ -14,8 +15,11 @@ public class moveCup : MonoBehaviour {
 	Vector3 toPos;
 	float speed;
 	bool clicked=false;
+	public PilloID ids;
 	// Use this for initialization
 	void Start () {
+
+		PilloController.ConfigureSensorRange (0x50, 0x6f);
 		grav = this.GetComponent<Rigidbody> ();
 		controller =GameControllerObj.GetComponent<gameControler> ();
 		ballScr = ball.GetComponent<collision> ();
@@ -36,6 +40,7 @@ public class moveCup : MonoBehaviour {
 		if (clicked) {
 			ball.transform.parent=null;
 		}
+		OnPilloDown ();
 	}
 	void MoveToNewPos()
 	{
@@ -52,9 +57,9 @@ public class moveCup : MonoBehaviour {
 			ColorName=ball.GetComponent<ballBehave>().CollorName;
 		}
 	}
-	void OnMouseDown()
+	void OnPilloDown()
 	{
-		if (!clicked) {
+		if (!clicked && PilloController.GetSensor(ids)>0.2f) {
 			if (controller.guss == ColorName) {
 				//dit is goed
 				Debug.Log ("goed");
@@ -65,6 +70,7 @@ public class moveCup : MonoBehaviour {
 				}
 				correct.Play();
 				controller.newText.text = controller.guss;
+				controller.score++;
 				grav.isKinematic=true;
 				ballScr.gameObjectObj=null;
 				ball.transform.SetParent(null);

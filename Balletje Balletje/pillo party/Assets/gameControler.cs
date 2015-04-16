@@ -16,9 +16,12 @@ public class gameControler : MonoBehaviour {
 	bool[] ChoosePath;
 	Vector3[] teaCupPos;
 	public Text newText;
+	public Text ScoreText;
+	public int score=0;
 	// Use this for initialization
 	void Start () {
-
+		score = 0;
+		ScoreText.text = "Score: " + score;
 		teaCupPos=new Vector3[teaCupsObj.Length];
 		colNameGuss = new string[teaCupsObj.Length];
 		ChoosePath = new bool[teaCupsObj.Length];
@@ -34,6 +37,7 @@ public class gameControler : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		ScoreText.text = "Score: " + score;
 		if (startGame && !choosAllPlace && nextPlace>=0) {
 			for (int i=0; i<teaCupsObj.Length; i++) {
 				ChoosePos(i);
